@@ -34,8 +34,9 @@ BaseSettings.model_config["protected_namespaces"] = ()
 
 
 class Settings(BaseSettings):
-    model: str = Field(
-        description="The path to the model to use for generating completions."
+    model: Optional[str] = Field(
+        default="/home/lumi/.cache/lm-studio/models/rizerphe/CodeLlama-function-calling-6320-7b-Instruct-GGUF/codellama-function-calling-6320-7b-instruct.gguf.q5_k_m.bin",
+        description="The path to the model to use for generating completions.",
     )
     model_alias: Optional[str] = Field(
         default=None,
@@ -43,7 +44,7 @@ class Settings(BaseSettings):
     )
     # Model Params
     n_gpu_layers: int = Field(
-        default=0,
+        default=-1,
         ge=-1,
         description="The number of layers to put on the GPU. The rest will be on the CPU. Set -1 to move all to GPU.",
     )
@@ -60,18 +61,20 @@ class Settings(BaseSettings):
         default=False, description="Whether to only return the vocabulary."
     )
     use_mmap: bool = Field(
-        default=llama_cpp.llama_mmap_supported(),
+        default=True,
+        # default=llama_cpp.llama_mmap_supported(),
         description="Use mmap.",
     )
     use_mlock: bool = Field(
-        default=llama_cpp.llama_mlock_supported(),
+        default=True,
+        # default=llama_cpp.llama_mlock_supported(),
         description="Use mlock.",
     )
     # Context Params
     seed: int = Field(
         default=llama_cpp.LLAMA_DEFAULT_SEED, description="Random seed. -1 for random."
     )
-    n_ctx: int = Field(default=2048, ge=1, description="The context size.")
+    n_ctx: int = Field(default=4096, ge=1, description="The context size.")
     n_batch: int = Field(
         default=512, ge=1, description="The batch size to use per eval."
     )
@@ -656,10 +659,7 @@ def _logit_bias_tokens_to_input_ids(
     return to_bias
 
 
-@router.post(
-    "/v1/completions",
-    summary="Completion"
-)
+@router.post("/v1/completions", summary="Completion")
 @router.post("/v1/engines/copilot-codex/completions", include_in_schema=False)
 async def create_completion(
     request: Request,
@@ -733,10 +733,7 @@ class CreateEmbeddingRequest(BaseModel):
     }
 
 
-@router.post(
-    "/v1/embeddings",
-    summary="Embedding"
-)
+@router.post("/v1/embeddings", summary="Embedding")
 async def create_embedding(
     request: CreateEmbeddingRequest, llama: llama_cpp.Llama = Depends(get_llama)
 ):
@@ -823,10 +820,7 @@ class CreateChatCompletionRequest(BaseModel):
     }
 
 
-@router.post(
-    "/v1/chat/completions",
-    summary="Chat"
-)
+@router.post("/v1/chat/completions", summary="Chat")
 async def create_chat_completion(
     request: Request,
     body: CreateChatCompletionRequest,

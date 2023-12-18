@@ -1,3 +1,13 @@
+# Wolf Notes
+
+- add cuda/bin to path!!!
+- use cuda 12.1. is higher also possible?
+- install llama_cpp with ```make build.cuda```
+- start server with:```python llama_cpp/server/__main__.py --model $MODEL``` 
+- ```--host 0.0.0.0``` to bind to all host ips.
+
+
+
 # 🦙 Python Bindings for [`llama.cpp`](https://github.com/ggerganov/llama.cpp)
 
 [![Documentation Status](https://readthedocs.org/projects/llama-cpp-python/badge/?version=latest)](https://llama-cpp-python.readthedocs.io/en/latest/?badge=latest)
