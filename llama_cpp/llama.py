@@ -227,6 +227,7 @@ class _LlamaModel:
         self.path_model = path_model
         self.params = params
         self.verbose = verbose
+        print("LLAMA PARAMSSS2:\n", params)
 
         self._llama_free_model = llama_cpp._lib.llama_free_model  # type: ignore
 
@@ -771,7 +772,7 @@ class Llama:
         **kwargs,  # type: ignore
     ):
         """Load a llama.cpp model from `model_path`.
-    
+
         Examples:
             Basic usage
 
@@ -1341,7 +1342,7 @@ class Llama:
         self,
         prompt: Union[str, List[int]],
         suffix: Optional[str] = None,
-        max_tokens: Optional[int] = 16,
+        max_tokens: Optional[int] = None,
         temperature: float = 0.8,
         top_p: float = 0.95,
         min_p: float = 0.05,
@@ -1842,7 +1843,7 @@ class Llama:
         self,
         prompt: Union[str, List[int]],
         suffix: Optional[str] = None,
-        max_tokens: Optional[int] = 16,
+        max_tokens: Optional[int] = None,
         temperature: float = 0.8,
         top_p: float = 0.95,
         min_p: float = 0.05,
@@ -1939,7 +1940,7 @@ class Llama:
         self,
         prompt: str,
         suffix: Optional[str] = None,
-        max_tokens: int = 128,
+        max_tokens: int = None,
         temperature: float = 0.8,
         top_p: float = 0.95,
         min_p: float = 0.05,
