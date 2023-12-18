@@ -1,5 +1,5 @@
 update:
-	poetry install
+	# poetry install
 	git submodule update --init --recursive
 
 update.vendor:
@@ -13,7 +13,7 @@ build:
 	python3 -m pip install -e .
 
 build.cuda:
-	CMAKE_ARGS="-DLLAMA_CUBLAS=on" python3 -m pip install -e .
+	CUDACXX=/usr/local/cuda-12.1/bin/nvcc CMAKE_ARGS="-DLLAMA_CUBLAS=on" python3 -m pip install -e .
 
 build.opencl:
 	CMAKE_ARGS="-DLLAMA_CLBLAST=on" python3 -m pip install -e .
@@ -44,7 +44,7 @@ docker:
 	docker build -t llama-cpp-python:latest -f docker/simple/Dockerfile .
 
 run-server:
-	uvicorn --factory llama.server:app --host ${HOST} --port ${PORT}
+	uvicorn --factory llama_cpp.server:app --host ${HOST} --port ${PORT}
 
 clean:
 	- cd vendor/llama.cpp && make clean
